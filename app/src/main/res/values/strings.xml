@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">VolleyDemo</string>
+
+    <!-- Error -->
+    <string name="error_load_more_no_adapter_type" translatable="false">没有给 adapter 确定类型</string>
+
+    <!-- Base -->
+    <string name="base_toast_net_down">网络不可用，请检查网络</string>
+    <string name="base_toast_net_worse">网络连接不稳定，请稍后再试</string>
+
+    <string name="base_snack_no_item">没有一条记录</string>
+    <string name="base_snack_no_more_item">没有更多的了</string>
+
+    <!-- fragment_public_empty_page_layout -->
+    <string name="empty_page_no_any_data_record">尚无任何数据或记录</string>
+
+    <!-- fragment_public_net_down_layout -->
+    <string name="net_down_press_btn_refresh">请点击刷新按钮进行刷新</string>
+
+    <!-- public_load_more_item -->
+    <string name="load_more_load_more_tv">正在加载更多……</string>
+
+</resources>
