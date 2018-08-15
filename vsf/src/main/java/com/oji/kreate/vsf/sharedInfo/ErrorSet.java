@@ -1,4 +1,4 @@
-package com.oji.kreate.vsf.sharedinfo;
+package com.oji.kreate.vsf.sharedInfo;
 
 /**
  * Created by Kreate on 2017/12/28.

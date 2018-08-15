@@ -3,7 +3,7 @@ package com.oji.kreate.vsf.base;
 import android.content.Context;
 import android.view.View;
 
-import com.oji.kreate.vsf.sharedinfo.SharedAction;
+import com.oji.kreate.vsf.sharedInfo.SharedAction;
 
 /**
  * Created by KeY on 2016/6/5.

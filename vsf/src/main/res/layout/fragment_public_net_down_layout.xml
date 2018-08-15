@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/net_down_refresh_img"
+        android:id="@+id/frgment_nd_refresh_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/net_down_refresh_img"
+        android:layout_below="@id/frgment_nd_refresh_img"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/item_double_divider"
         android:text="@string/net_down_press_btn_refresh"

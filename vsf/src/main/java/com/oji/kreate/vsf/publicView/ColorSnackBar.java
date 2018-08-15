@@ -8,19 +8,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.oji.kreate.vsf.Public_ErrorSet;
 import com.oji.kreate.vsf.R;
+import com.oji.kreate.vsf.publicClass.Methods;
 
 /**
  * Created by KeY on 2016/10/12.
  */
-public class ColorSnackBar implements Public_ErrorSet {
+public class ColorSnackBar {
 
     private Context context;
 
     private Snackbar snackbar;
 
-    private int cos = 0;
+    private int cos;
+
+    private CoordinatorLayout snack_col;
 
 //    public ColorSnackBar(Context context, int parent_resId) {
 //        this.context = context;
@@ -33,14 +35,37 @@ public class ColorSnackBar implements Public_ErrorSet {
 
     public ColorSnackBar(Context context) {
         this.context = context;
+
+        cos = 0;
+        snack_col = null;
     }
 
-    public void LogInfo() {
-        Log.i(getClass().getName(), "Context is : " + context);
+    private void LogInfo() {
+        Log.i(getClass().getName(), "snack bar context is : " + context);
+    }
+
+    public ColorSnackBar setSnackViewParent(int parent_resId) {
+        if (parent_resId == 0) {
+            parent_resId = R.id.snack_col;
+        }
+
+        AppCompatActivity activity = (AppCompatActivity) context;
+        snack_col = activity.findViewById(parent_resId);
+
+        return this;
     }
 
     public void show(String text) {
-        CoordinatorLayout snack_col = ((AppCompatActivity) context).findViewById(R.id.snack_col);
+        LogInfo();
+
+        if (snack_col == null) {
+            try {
+                snack_col = ((AppCompatActivity) context).findViewById(R.id.snack_col);
+            } catch (Exception e) {
+                Log.e(getClass().getName(), "SnackBar没有引入布局");
+                return;
+            }
+        }
 
         if (snackbar != null) {
             snackbar = null;
@@ -51,16 +76,39 @@ public class ColorSnackBar implements Public_ErrorSet {
             }
         }
 
-        try {
-            snackbar = Snackbar.make(snack_col, text, Snackbar.LENGTH_SHORT);
-        } catch (Exception exception) {
-            Log.e(getClass().getName(), SNACK_NOT_IMPORT);
-            return;
-        }
+        snackbar = Snackbar.make(snack_col, text, Snackbar.LENGTH_SHORT);
 
         Snackbar.SnackbarLayout snackbarView = (Snackbar.SnackbarLayout) snackbar.getView();
-        snackbarView.setBackgroundColor(0xFF7EC8DB);
-        ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor(Color.parseColor("#FF2E4F92"));
+
+        // get snack background color and text color from property file
+        String snack_bgcolor = Methods.getSpecificProperty(context, "snack_bgcolor");
+        String snack_text_color = Methods.getSpecificProperty(context, "snack_text_color");
+
+        // set snack background color
+        int bgcolor = 0xFF7EC8DB;
+        if (snack_bgcolor != null && !snack_bgcolor.isEmpty()) {
+            bgcolor = Integer.parseInt(snack_bgcolor);
+        }
+        try {
+            snackbarView.setBackgroundColor(bgcolor);
+        } catch (Exception e) {
+            Log.e(getClass().getName(), "SnackView的背景色值异常---SnackView background color value wrong.");
+            bgcolor = 0xFF7EC8DB;
+            snackbarView.setBackgroundColor(bgcolor);
+        }
+
+        // set snack text color
+        String text_color = "#FF2E4F92";
+        if (snack_text_color != null && !snack_text_color.isEmpty()) {
+            text_color = snack_text_color;
+        }
+        try {
+            ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor(Color.parseColor(text_color));
+        } catch (Exception e) {
+            Log.e(getClass().getName(), "SnackView的字体色值异常---SnackView text color value wrong.");
+            text_color = "#FF2E4F92";
+            ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor(Color.parseColor(text_color));
+        }
 
         snackbar.show();
     }
