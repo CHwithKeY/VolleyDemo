@@ -1,6 +1,7 @@
 package com.oji.kreate.vsf.publicClass;
 
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,10 +19,18 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.android.volley.RequestQueue;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 /**
@@ -139,6 +149,43 @@ public final class Methods {
             e.printStackTrace();
             return "get version error";
         }
+    }
+
+    /**
+     * 获取应用程序名称
+     */
+    public static String getAppName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            int labelRes = packageInfo.applicationInfo.labelRes;
+            return context.getResources().getString(labelRes);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Properties getProperties(Context context) {
+        Properties props = new Properties();
+        try {
+            //方法一：通过activity中的context攻取setting.properties的FileInputStream
+            //注意这地方的参数appConfig在eclipse中应该是appConfig.properties才对,但在studio中不用写后缀
+            //InputStream in = c.getAssets().open("appConfig.properties");
+            InputStream in = context.getAssets().open("vsf_config");
+            //方法二：通过class获取setting.properties的FileInputStream
+            //InputStream in = PropertiesUtill.class.getResourceAsStream("/assets/  setting.properties "));
+            props.load(in);
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        return props;
+    }
+
+    public static String getSpecificProperty(Context context, String property_name) {
+        return getProperties(context).getProperty(property_name);
     }
 
     public static boolean isNetworkAvailable(Context context) {

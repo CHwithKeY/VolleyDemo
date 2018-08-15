@@ -5,7 +5,7 @@ import android.content.Context;
 import com.oji.kreate.vsf.R;
 import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
-import com.oji.kreate.vsf.sharedinfo.SharedAction;
+import com.oji.kreate.vsf.sharedInfo.SharedAction;
 
 /**
  * Created by KeY on 2016/6/3.

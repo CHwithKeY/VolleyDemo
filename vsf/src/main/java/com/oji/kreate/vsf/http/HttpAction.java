@@ -15,10 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.oji.kreate.vsf.R;
-import com.oji.kreate.vsf.VolleySingleton;
 import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
-import com.oji.kreate.vsf.sharedinfo.SharedAction;
+import com.oji.kreate.vsf.sharedInfo.SharedAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +54,8 @@ public final class HttpAction {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        String base_url = Methods.getSpecificProperty(context, "base_url");
+        this.url = base_url + url;
     }
 
     public void setMap(String[] key, String[] value) {

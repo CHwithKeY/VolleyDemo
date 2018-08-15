@@ -4,11 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
-import com.oji.kreate.vsf.base.Base_Act;
-import com.oji.kreate.vsf.base.Base_Frag;
-import com.oji.kreate.vsf.base.Base_Serv;
-import com.oji.kreate.vsf.publicView.ColorSnackBar;
-import com.oji.kreate.vsf.sharedinfo.SharedAction;
+import com.oji.kreate.vsf.base.BaseActivity;
+import com.oji.kreate.vsf.base.BaseFragment;
+import com.oji.kreate.vsf.base.BaseService;
+import com.oji.kreate.vsf.publicClass.Methods;
 
 import org.json.JSONException;
 
@@ -22,41 +21,24 @@ public final class HttpHandler extends Handler {
 
     private Context context;
 
-//    private LineToast toast;
-
-    private ColorSnackBar snackBar;
-    private SharedAction sharedAction;
-
-    private Base_Frag fragment;
-    private Base_Serv service;
+    private BaseFragment fragment;
+    private BaseService service;
 
     // Activity的请求时候的构造函数
     public HttpHandler(Context context) {
         this.context = context;
-
-//        toast = new LineToast(context);
-//        snackBar = new ColorSnackBar(context);
-        sharedAction = new SharedAction(context);
     }
 
     // Fragment的请求时候的构造函数
-    public HttpHandler(Context context, Base_Frag fragment) {
+    public HttpHandler(Context context, BaseFragment fragment) {
         this.context = context;
         this.fragment = fragment;
-
-//        toast = new LineToast(context);
-//        snackBar = new ColorSnackBar(context);
-        sharedAction = new SharedAction(context);
     }
 
     // Service的请求时候的构造函数
-    public HttpHandler(Context context, Base_Serv service) {
+    public HttpHandler(Context context, BaseService service) {
         this.context = context;
         this.service = service;
-
-//        toast = new LineToast(context);
-//        snackBar = new ColorSnackBar(context);
-        sharedAction = new SharedAction(context);
     }
 
     public void handleResponse(String tag, String result) throws JSONException {
@@ -66,7 +48,7 @@ public final class HttpHandler extends Handler {
         } else if (service != null) {
             service.onMultiHandleResponse(tag, result);
         } else {
-            ((Base_Act) context).onMultiHandleResponse(tag, result);
+            ((BaseActivity) context).onMultiHandleResponse(tag, result);
         }
     }
 
@@ -76,7 +58,7 @@ public final class HttpHandler extends Handler {
         } else if (service != null) {
             service.onNullResponse(tag);
         } else {
-            ((Base_Act) context).onNullResponse(tag);
+            ((BaseActivity) context).onNullResponse(tag);
         }
     }
 
@@ -85,7 +67,7 @@ public final class HttpHandler extends Handler {
 
         switch (msg.what) {
             case HttpSet.httpResponse:
-                HashMap<String, String> map = cast(msg.obj);
+                HashMap<String, String> map = Methods.cast(msg.obj);
 
                 String tag = "";
                 Set set = map.keySet();
@@ -103,7 +85,7 @@ public final class HttpHandler extends Handler {
                 break;
 
             case HttpSet.httpNull:
-                String null_tag = cast(msg.obj);
+                String null_tag = Methods.cast(msg.obj);
                 try {
                     handleNullMsg(null_tag);
                 } catch (JSONException e) {
@@ -116,8 +98,4 @@ public final class HttpHandler extends Handler {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T cast(Object obj) {
-        return (T) obj;
-    }
 }

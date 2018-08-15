@@ -10,7 +10,7 @@ import org.json.JSONException;
 /**
  * Created by KeY on 2016/8/17.
  */
-public abstract class Base_Serv extends Service {
+public abstract class BaseService extends Service {
 
     @Nullable
     @Override
@@ -18,7 +18,7 @@ public abstract class Base_Serv extends Service {
         return null;
     }
 
-    public Base_Serv() {
+    public BaseService() {
     }
 
     // 根据不同的Handler可以处理不同的反馈结果
