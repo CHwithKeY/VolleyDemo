@@ -15,17 +15,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.oji.kreate.vsf.R;
+import com.oji.kreate.vsf.base.BaseActivity;
 import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
-import com.oji.kreate.vsf.sharedInfo.SharedAction;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by KeY on 2016/3/29.
  */
-public final class HttpAction {
+public final class HttpAction implements ErrorSet {
 
     private Context context;
     private HttpHandler handler;
@@ -44,13 +46,10 @@ public final class HttpAction {
 
     private ColorSnackBar snackBar;
 
-    private SharedAction sharedAction;
-
     public HttpAction(Context context) {
         this.context = context;
 
         snackBar = new ColorSnackBar(context);
-        sharedAction = new SharedAction(context);
     }
 
     public void setUrl(String url) {
@@ -70,40 +69,45 @@ public final class HttpAction {
         this.tts = tts;
     }
 
-    public void setDialog(String title, String msg) {
+    private void initDialog() {
         dialog = new ProgressDialog(context);
+
+        // 不允许用户点击 dialog 外部从而导致 dialog 消失
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+
+        // 不允许用户点击“返回键”从而导致 dialog 消失
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                return keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0;
+            }
+        });
+
+    }
+
+    public void setDialog(String title, String msg) {
+        initDialog();
 
         dialog.setTitle(title);
         dialog.setMessage(msg);
-
-        // 不允许用户点击 dialog 外部从而导致 dialog 消失
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-
-        // 不允许用户点击“返回键”从而导致 dialog 消失
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                return keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0;
-            }
-        });
     }
 
     public void setDialog(String msg) {
-        dialog = new ProgressDialog(context);
+        initDialog();
+
         dialog.setMessage(msg);
+    }
 
-        // 不允许用户点击 dialog 外部从而导致 dialog 消失
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-
-        // 不允许用户点击“返回键”从而导致 dialog 消失
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                return keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0;
-            }
-        });
+    public void setDialogCancelEnable(boolean cancelEnable) {
+        if (cancelEnable) {
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    queue.stop();
+                }
+            });
+        }
     }
 
     public void setHandler(HttpHandler handler) {
@@ -144,6 +148,19 @@ public final class HttpAction {
             queue = VolleySingleton.getInstance(context).getRequestQueue();
         }
 
+        if (checkNullEmpty("url", url)) {
+            return;
+        }
+
+        if (checkNullEmpty("tag", tag)) {
+            return;
+        }
+
+        if (map == null) {
+            Log.e(getClass().getName(), "---map---:" + PARAMS_IS_NULL_EMPTY);
+            return;
+        }
+
         StringRequest request = new StringRequest(Request.Method.POST, url, resListener, errListener) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -157,7 +174,41 @@ public final class HttpAction {
         // 这条语句意思是让这个傻逼的 volley 能够重连，保持时间为5s，不然TMD服务器还没反应过来呢
         request.setRetryPolicy(new DefaultRetryPolicy(tts, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(request);
+    }
 
+    public void defaultConnect(String url, String dlg_msg, String httpTag) {
+        if (url == null || dlg_msg == null || httpTag == null || url.isEmpty() || dlg_msg.isEmpty() || httpTag.isEmpty()) {
+            Log.e(getClass().getName(), PARAMS_IS_NULL_EMPTY);
+            return;
+        }
+
+        try {
+            HashMap<String, String> httpParams = ((BaseActivity) context).getHttpParams();
+
+            Set<String> map_key = httpParams.keySet();
+            Iterator<String> iterator = map_key.iterator();
+
+            String[] key = new String[map_key.size()];
+            String[] value = new String[map_key.size()];
+
+            int i = 0;
+            while (iterator.hasNext()) {
+                key[i] = iterator.next();
+                value[i] = httpParams.get(key[i]);
+                System.out.print("key is : " + key[i]);
+                System.out.print("value is : " + value[i]);
+            }
+
+            setUrl(url);
+            setMap(key, value);
+            setDialog(dlg_msg);
+            setHandler(new HttpHandler(context));
+            setTag(httpTag);
+
+            interaction();
+        } catch (Exception e) {
+            Log.e(getClass().getName(), DEFAULT_CONNECT_WRONG);
+        }
     }
 
     private Response.Listener<String> resListener = new Response.Listener<String>() {
@@ -176,7 +227,11 @@ public final class HttpAction {
             Message msg = new Message();
             msg.what = HttpSet.httpResponse;
             msg.obj = res_map;
-            handler.sendMessage(msg);
+
+            if (handler != null) {
+                handler.sendMessage(msg);
+                Log.e(getClass().getName(), "---Handler---:" + PARAMS_IS_NULL_EMPTY);
+            }
 
 //            queue = null;
         }
@@ -193,19 +248,32 @@ public final class HttpAction {
             Message msg = new Message();
             msg.what = HttpSet.httpNull;
             msg.obj = tag;
-            handler.sendMessage(msg);
 
-            snackBar.show(context.getString(R.string.base_toast_net_worse));
+            if (handler != null) {
+                handler.sendMessage(msg);
+                Log.e(getClass().getName(), "---Handler---:" + PARAMS_IS_NULL_EMPTY);
+            }
+
+            snackBar.show(NET_DISCONNECT);
 
 //            queue.stop();
         }
     };
 
+    private boolean checkNullEmpty(String check_key, String check_text) {
+        if (check_text == null || check_text.isEmpty()) {
+            Log.e(getClass().getName(), "---" + check_key + "---:" + PARAMS_IS_NULL_EMPTY);
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean checkNet(Context context) {
         ColorSnackBar snackBar = new ColorSnackBar(context);
 
         if (!Methods.isNetworkAvailable(context)) {
-            snackBar.show(context.getString(R.string.base_toast_net_down));
+            snackBar.show(NET_DOWN);
         }
 
         return Methods.isNetworkAvailable(context);

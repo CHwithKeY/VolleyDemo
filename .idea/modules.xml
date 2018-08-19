@@ -3,11 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VolleyDemo.iml" filepath="$PROJECT_DIR$/VolleyDemo.iml" />
-      <module fileurl="file://E:\StudioSpace\VolleyDemo\VolleyDemo.iml" filepath="E:\StudioSpace\VolleyDemo\VolleyDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://E:\StudioSpace\VolleyDemo\app\app.iml" filepath="E:\StudioSpace\VolleyDemo\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/vsf/vsf.iml" filepath="$PROJECT_DIR$/vsf/vsf.iml" />
-      <module fileurl="file://E:\StudioSpace\VolleyDemo\vsf\vsf.iml" filepath="E:\StudioSpace\VolleyDemo\vsf\vsf.iml" />
     </modules>
   </component>
 </project>

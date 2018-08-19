@@ -2,11 +2,15 @@ package com.oji.kreate.vsf.publicFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.oji.kreate.vsf.R;
+import com.oji.kreate.vsf.base.BaseAction;
+import com.oji.kreate.vsf.base.BaseActivity;
 import com.oji.kreate.vsf.base.BaseFragment;
 import com.oji.kreate.vsf.publicClass.Methods;
 
@@ -18,14 +22,14 @@ import org.json.JSONException;
  */
 
 public class NetDownFragment extends BaseFragment {
-//
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return inflater.inflate(R.layout.page_public_net_down, container, false);
         int netdown_page_layout_id = Integer.parseInt(Methods.getSpecificProperty(getContext(), "netdown_page_layout_id"));
 
-        View view = null;
+        View view;
         try {
             view = inflater.inflate(netdown_page_layout_id, container, false);
         } catch (Exception e) {
@@ -36,8 +40,29 @@ public class NetDownFragment extends BaseFragment {
     }
 
     @Override
+    public void setArguments(Bundle args) {
+        super.setArguments(args);
+
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setupRefreshImg(view);
+    }
+
+    private void setupRefreshImg(View view) {
+        Log.i("Result", "view is : " + view + "----- getView is : " + getContext().getResources().getLayout(R.layout.fragment_public_net_down_layout));
+        if (view == getContext().getResources().getLayout(R.layout.fragment_public_net_down_layout)) {
+            final ImageView refresh_img = view.findViewById(R.id.frgment_nd_refresh_img);
+            refresh_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((BaseActivity) getContext()).handleNetDownAction();
+                }
+            });
+        }
     }
 
     @Override
