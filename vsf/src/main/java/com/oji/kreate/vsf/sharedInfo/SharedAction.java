@@ -27,19 +27,19 @@ public final class SharedAction implements ErrorSet {
         editor.apply();
     }
 
-    public void clearMap(String key) {
+    public void clearInfo(String key) {
         SharedPreferences.Editor editor = this.sp.edit();
         editor.putString(key, "");
         editor.apply();
     }
 
-    public void setMap(String key, String value) {
+    public void setInfo(String key, String value) {
         SharedPreferences.Editor editor = this.sp.edit();
         editor.putString(key, String.valueOf(value));
         editor.apply();
     }
 
-    public String getMap(String key) {
+    public String getInfo(String key) {
         return sp.getString(key, "");
     }
 

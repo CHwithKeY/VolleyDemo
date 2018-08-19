@@ -1,16 +1,21 @@
 package com.oji.kreate.vsf.base;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.oji.kreate.vsf.R;
 import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
 import com.oji.kreate.vsf.sharedInfo.SharedAction;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by KeY on 2016/6/3.
  */
-public class BaseAction {
+public class BaseAction implements ErrorSet {
 
     public final static int REQUEST_DEFAULT = 0;
     public final static int REQUEST_LOAD_MORE = 1;
@@ -55,14 +60,35 @@ public class BaseAction {
         }
     }
 
-    protected boolean checkNet() {
-        varInit();
-        if (!Methods.isNetworkAvailable(context)) {
-            snackBar.show(context.getString(R.string.base_toast_net_down));
-        }
+    protected void handleResponseList(String result) throws JSONException {
+        JSONArray array = new JSONArray(result);
 
-        return Methods.isNetworkAvailable(context);
+
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject obj = array.getJSONObject(i);
+
+
+        }
     }
+
+    protected String handleResponseString(String response, String httpKey) throws JSONException {
+        JSONObject object = new JSONObject(response);
+        try {
+            return object.getString(httpKey);
+        } catch (Exception e) {
+            Log.e(getClass().getName(), HANDLE_JSON_STRING_WRONG);
+            return "";
+        }
+    }
+
+//    protected boolean checkNet() {
+//        varInit();
+//        if (!Methods.isNetworkAvailable(context)) {
+//            snackBar.show(context.getString(R.string.base_toast_net_down));
+//        }
+//
+//        return Methods.isNetworkAvailable(context);
+//    }
 
 //    protected void getStringRes(int resId) {
 //        try {

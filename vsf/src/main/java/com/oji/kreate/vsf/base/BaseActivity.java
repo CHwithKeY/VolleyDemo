@@ -24,8 +24,13 @@ import com.oji.kreate.vsf.sharedInfo.SharedSet;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class BaseActivity extends AppCompatActivity implements RemoveLoadMoreImpl, ErrorSet {
+
+    static final int SET_HTTP_PARAMS_SUCCESS = 2000;
+    static final int SET_HTTP_PARAMS_FAIL = 2100;
 
     protected Toolbar toolbar;
 
@@ -37,6 +42,9 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
     // cos = Count of SnackBar
     private int cos = 0;
 
+    //
+    private HashMap<String, String> httpParamsMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,8 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
         sharedAction.setShared(sp);
 
         snackBar = new ColorSnackBar(this);
+
+        httpParamsMap = new HashMap<>();
 
         varInit();
 
@@ -201,6 +211,8 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
         }
     }
 
+    public abstract void handleNetDownAction();
+
 //    public void showNetDownPage(int parent_resId, String url, String responseTag, String response) {
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -222,6 +234,21 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
     public abstract void onPermissionAccepted(int permission_code);
 
     public abstract void onPermissionRefused(int permission_code);
+
+    public int setHttpParams(String key, String value) {
+        if (key != null && value != null && !key.isEmpty()) {
+            httpParamsMap.put(key, value);
+
+            return SET_HTTP_PARAMS_SUCCESS;
+        }
+
+        Log.e(getClass().getName(), SET_HTTP_PARAMS_KEY_WRONG);
+        return SET_HTTP_PARAMS_FAIL;
+    }
+
+    public HashMap<String, String> getHttpParams() {
+        return httpParamsMap;
+    }
 
     /**
      * @param adapter     导入当前 Activity 所拥有的 adapter
