@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.oji.kreate.vsf.R;
-import com.oji.kreate.vsf.base.BaseAction;
-import com.oji.kreate.vsf.base.BaseActivity;
-import com.oji.kreate.vsf.base.BaseFragment;
+import com.oji.kreate.vsf.base.BaseHttpActivity;
+import com.oji.kreate.vsf.base.BaseHttpFragment;
 import com.oji.kreate.vsf.publicClass.Methods;
 
 import org.json.JSONException;
@@ -21,7 +20,7 @@ import org.json.JSONException;
  * Created by spilkaka on 2018/4/12.
  */
 
-public class NetDownFragment extends BaseFragment {
+public class NetDownFragment extends BaseHttpFragment {
 
     @Nullable
     @Override
@@ -59,7 +58,7 @@ public class NetDownFragment extends BaseFragment {
             refresh_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((BaseActivity) getContext()).handleNetDownAction();
+                    ((BaseHttpActivity) getContext()).handleNetDownAction();
                 }
             });
         }
