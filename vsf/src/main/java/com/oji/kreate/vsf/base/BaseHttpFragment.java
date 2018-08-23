@@ -1,14 +1,8 @@
 package com.oji.kreate.vsf.base;
 
-import android.graphics.Color;
 import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.widget.TextView;
 
-import com.oji.kreate.vsf.R;
 import com.oji.kreate.vsf.publicAdapter.BaseRycAdapter;
 import com.oji.kreate.vsf.publicClass.loadMore.RemoveLoadMoreImpl;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
@@ -21,13 +15,13 @@ import java.util.ArrayList;
 /**
  * Created by KeY on 2016/6/6.
  */
-public abstract class BaseFragment extends Fragment implements RemoveLoadMoreImpl {
+public abstract class BaseHttpFragment extends Fragment implements RemoveLoadMoreImpl {
 
     protected String tag;
 
     private ColorSnackBar snackBar;
 
-    public BaseFragment() {
+    public BaseHttpFragment() {
         snackBar = new ColorSnackBar(getContext());
     }
 

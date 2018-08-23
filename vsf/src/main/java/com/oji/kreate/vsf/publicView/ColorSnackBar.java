@@ -14,7 +14,7 @@ import com.oji.kreate.vsf.publicClass.Methods;
 /**
  * Created by KeY on 2016/10/12.
  */
-public class ColorSnackBar {
+public class ColorSnackBar implements ErrorSet {
 
     private Context context;
 
@@ -62,7 +62,7 @@ public class ColorSnackBar {
             try {
                 snack_col = ((AppCompatActivity) context).findViewById(R.id.snack_col);
             } catch (Exception e) {
-                Log.e(getClass().getName(), "SnackBar没有引入布局");
+                Log.e(getClass().getName(), SNACK_VIEW_NOT_IMPORTED);
                 return;
             }
         }
@@ -92,7 +92,7 @@ public class ColorSnackBar {
         try {
             snackbarView.setBackgroundColor(bgcolor);
         } catch (Exception e) {
-            Log.e(getClass().getName(), "SnackView的背景色值异常---SnackView background color value wrong.");
+            Log.e(getClass().getName(), SNACK_VIEW_BACKGROUND_WRONG);
             bgcolor = 0xFF7EC8DB;
             snackbarView.setBackgroundColor(bgcolor);
         }
@@ -105,7 +105,7 @@ public class ColorSnackBar {
         try {
             ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor(Color.parseColor(text_color));
         } catch (Exception e) {
-            Log.e(getClass().getName(), "SnackView的字体色值异常---SnackView text color value wrong.");
+            Log.e(getClass().getName(), SNACK_VIEW_TEXT_COLOR_WRONG);
             text_color = "#FF2E4F92";
             ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor(Color.parseColor(text_color));
         }

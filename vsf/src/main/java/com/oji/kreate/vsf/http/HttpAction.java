@@ -14,8 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.oji.kreate.vsf.R;
-import com.oji.kreate.vsf.base.BaseActivity;
+import com.oji.kreate.vsf.base.BaseHttpActivity;
 import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
 
@@ -183,7 +182,7 @@ public final class HttpAction implements ErrorSet {
         }
 
         try {
-            HashMap<String, String> httpParams = ((BaseActivity) context).getHttpParams();
+            HashMap<String, String> httpParams = ((BaseHttpActivity) context).getHttpParams();
 
             Set<String> map_key = httpParams.keySet();
             Iterator<String> iterator = map_key.iterator();

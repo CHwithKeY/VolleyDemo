@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oji.kreate.vsf.R;
-import com.oji.kreate.vsf.base.BaseFragment;
+import com.oji.kreate.vsf.base.BaseHttpFragment;
 import com.oji.kreate.vsf.publicClass.Methods;
 
 import org.json.JSONException;
@@ -17,7 +17,7 @@ import org.json.JSONException;
  * Created by spilkaka on 2018/4/12.
  */
 
-public class EmptyFragment extends BaseFragment {
+public class EmptyDataFragment extends BaseHttpFragment {
 
     @Nullable
     @Override
@@ -28,7 +28,7 @@ public class EmptyFragment extends BaseFragment {
         try {
             view = inflater.inflate(empty_page_layout_id, container, false);
         } catch (Exception e) {
-            view = inflater.inflate(R.layout.fragment_public_empty_page_layout, container, false);
+            view = inflater.inflate(R.layout.fragment_public_empty_data_layout, container, false);
         }
 
         return view;

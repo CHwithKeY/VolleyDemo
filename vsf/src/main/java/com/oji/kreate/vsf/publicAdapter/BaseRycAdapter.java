@@ -129,7 +129,7 @@ public abstract class BaseRycAdapter extends RecyclerView.Adapter {
         LoadViewHolder(View itemView) {
             super(itemView);
 
-            load_ll = (LinearLayout) itemView.findViewById(R.id.item_load_more_layout);
+            load_ll = itemView.findViewById(R.id.item_load_more_layout);
         }
     }
 }

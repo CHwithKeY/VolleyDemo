@@ -4,9 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
-import com.oji.kreate.vsf.base.BaseActivity;
-import com.oji.kreate.vsf.base.BaseFragment;
-import com.oji.kreate.vsf.base.BaseService;
+import com.oji.kreate.vsf.base.BaseHttpActivity;
+import com.oji.kreate.vsf.base.BaseHttpFragment;
+import com.oji.kreate.vsf.base.BaseHttpImpl;
+import com.oji.kreate.vsf.base.BaseHttpService;
 import com.oji.kreate.vsf.publicClass.Methods;
 
 import org.json.JSONException;
@@ -21,22 +22,28 @@ public final class HttpHandler extends Handler {
 
     private Context context;
 
-    private BaseFragment fragment;
-    private BaseService service;
+    private BaseHttpFragment fragment;
+    private BaseHttpService service;
+
+    private BaseHttpImpl httpImpl;
 
     // Activity的请求时候的构造函数
     public HttpHandler(Context context) {
         this.context = context;
     }
 
+    public HttpHandler(BaseHttpImpl httpImpl) {
+        this.httpImpl = httpImpl;
+    }
+
     // Fragment的请求时候的构造函数
-    public HttpHandler(Context context, BaseFragment fragment) {
+    public HttpHandler(Context context, BaseHttpFragment fragment) {
         this.context = context;
         this.fragment = fragment;
     }
 
     // Service的请求时候的构造函数
-    public HttpHandler(Context context, BaseService service) {
+    public HttpHandler(Context context, BaseHttpService service) {
         this.context = context;
         this.service = service;
     }
@@ -47,8 +54,10 @@ public final class HttpHandler extends Handler {
             fragment.onMultiHandleResponse(tag, result);
         } else if (service != null) {
             service.onMultiHandleResponse(tag, result);
+        } else if (httpImpl != null) {
+            httpImpl.onMultiHandleResponse(tag, result);
         } else {
-            ((BaseActivity) context).onMultiHandleResponse(tag, result);
+            ((BaseHttpActivity) context).onMultiHandleResponse(tag, result);
         }
     }
 
@@ -57,8 +66,10 @@ public final class HttpHandler extends Handler {
             fragment.onNullResponse(tag);
         } else if (service != null) {
             service.onNullResponse(tag);
+        } else if (httpImpl != null) {
+            httpImpl.onNullResponse(tag);
         } else {
-            ((BaseActivity) context).onNullResponse(tag);
+            ((BaseHttpActivity) context).onNullResponse(tag);
         }
     }
 

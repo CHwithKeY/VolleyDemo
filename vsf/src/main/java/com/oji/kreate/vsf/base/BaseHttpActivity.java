@@ -14,8 +14,9 @@ import android.widget.ImageButton;
 
 import com.oji.kreate.vsf.R;
 import com.oji.kreate.vsf.publicAdapter.BaseRycAdapter;
+import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicClass.loadMore.RemoveLoadMoreImpl;
-import com.oji.kreate.vsf.publicFragment.EmptyFragment;
+import com.oji.kreate.vsf.publicFragment.EmptyDataFragment;
 import com.oji.kreate.vsf.publicFragment.NetDownFragment;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
 import com.oji.kreate.vsf.sharedInfo.SharedAction;
@@ -25,9 +26,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-public abstract class BaseActivity extends AppCompatActivity implements RemoveLoadMoreImpl, ErrorSet {
+public abstract class BaseHttpActivity extends AppCompatActivity implements RemoveLoadMoreImpl, ErrorSet {
 
     static final int SET_HTTP_PARAMS_SUCCESS = 2000;
     static final int SET_HTTP_PARAMS_FAIL = 2100;
@@ -127,6 +127,17 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
         }
     }
 
+    protected void collapseIME(int viewResId) {
+        View view = findViewById(viewResId);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Methods.collapseIME(BaseHttpActivity.this);
+            }
+        });
+    }
+
     /**
      * @param parent_resId 如果当前 Activity 拥有 CoordinatorLayout 布局，那么可以直接导入该布局ID
      *                     如果使用默认布局，则直接输入0
@@ -164,7 +175,7 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
     }
 
     protected void showEmptyView(int parent_id) {
-        EmptyFragment emptyFragment = new EmptyFragment();
+        EmptyDataFragment emptyFragment = new EmptyDataFragment();
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentByTag("emptyFragment");
@@ -212,19 +223,6 @@ public abstract class BaseActivity extends AppCompatActivity implements RemoveLo
     }
 
     public abstract void handleNetDownAction();
-
-//    public void showNetDownPage(int parent_resId, String url, String responseTag, String response) {
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        try {
-//            NetDown_Frag netDown_frag = new NetDown_Frag();
-//            netDown_frag.setPing(url, responseTag, response);
-//            transaction.add(parent_resId, netDown_frag, "netdown_frag");
-//        } catch (Exception exception) {
-//            Log.e(getLocalClassName(), NET_DOWN_PARENT_RES_ID_NOT_FOUND);
-//        }
-//        transaction.commit();
-//    }
 
     // 根据不同的Handler可以处理不同的反馈结果
     public abstract void onMultiHandleResponse(String tag, String result) throws JSONException;

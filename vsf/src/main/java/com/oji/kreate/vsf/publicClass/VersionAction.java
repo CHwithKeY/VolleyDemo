@@ -7,9 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
-import com.oji.kreate.vsf.base.BaseAction;
+import com.oji.kreate.vsf.base.BaseHttpAction;
 import com.oji.kreate.vsf.http.HttpAction;
 import com.oji.kreate.vsf.http.HttpHandler;
 
@@ -30,7 +29,7 @@ import java.util.Locale;
  * Created by spilkaka on 2018/4/12.
  */
 
-public class VersionAction extends BaseAction {
+public class VersionAction extends BaseHttpAction {
 
     private String httpKey = "version";
     private String httpTag = "version_get";

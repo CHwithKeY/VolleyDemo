@@ -3,8 +3,6 @@ package com.oji.kreate.vsf.base;
 import android.content.Context;
 import android.util.Log;
 
-import com.oji.kreate.vsf.R;
-import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicView.ColorSnackBar;
 import com.oji.kreate.vsf.sharedInfo.SharedAction;
 
@@ -12,10 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by KeY on 2016/6/3.
  */
-public class BaseAction implements ErrorSet {
+public class BaseHttpAction implements ErrorSet {
 
     public final static int REQUEST_DEFAULT = 0;
     public final static int REQUEST_LOAD_MORE = 1;
@@ -31,7 +31,7 @@ public class BaseAction implements ErrorSet {
     protected ColorSnackBar snackBar;
     protected SharedAction sharedAction;
 
-    public BaseAction(Context context) {
+    public BaseHttpAction(Context context) {
         this.context = context;
 
         varInit();
@@ -60,14 +60,26 @@ public class BaseAction implements ErrorSet {
         }
     }
 
-    protected void handleResponseList(String result) throws JSONException {
-        JSONArray array = new JSONArray(result);
+    protected ArrayList<BaseHttpObject> handleResponseList(String response, BaseHttpObject object) throws JSONException {
+        ArrayList<BaseHttpObject> objectList = new ArrayList<>();
 
+        JSONArray array = new JSONArray(response);
 
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
+            objectList.add(object.wrap(obj));
+        }
 
+        return objectList;
+    }
 
+    protected BaseHttpObject handleResponseObject(String response, BaseHttpObject object) throws JSONException {
+        try {
+            JSONObject obj = new JSONObject(response);
+            return object.wrap(obj);
+        } catch (Exception e) {
+            Log.e(getClass().getName(), HANDLE_JSON_OBJECT_WRONG);
+            return null;
         }
     }
 
@@ -80,15 +92,6 @@ public class BaseAction implements ErrorSet {
             return "";
         }
     }
-
-//    protected boolean checkNet() {
-//        varInit();
-//        if (!Methods.isNetworkAvailable(context)) {
-//            snackBar.show(context.getString(R.string.base_toast_net_down));
-//        }
-//
-//        return Methods.isNetworkAvailable(context);
-//    }
 
 //    protected void getStringRes(int resId) {
 //        try {
