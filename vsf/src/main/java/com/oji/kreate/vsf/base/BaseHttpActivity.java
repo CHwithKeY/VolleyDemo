@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 
 import com.oji.kreate.vsf.R;
 import com.oji.kreate.vsf.publicAdapter.BaseRycAdapter;
+import com.oji.kreate.vsf.publicClass.Methods;
 import com.oji.kreate.vsf.publicClass.loadMore.RemoveLoadMoreImpl;
 import com.oji.kreate.vsf.publicFragment.EmptyDataFragment;
 import com.oji.kreate.vsf.publicFragment.NetDownFragment;
@@ -124,6 +125,17 @@ public abstract class BaseHttpActivity extends AppCompatActivity implements Remo
         } catch (Exception exception) {
             Log.e(getLocalClassName(), TITLE_BACK_BUTTON_NOT_FOUND);
         }
+    }
+
+    protected void collapseIME(int viewResId) {
+        View view = findViewById(viewResId);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Methods.collapseIME(BaseHttpActivity.this);
+            }
+        });
     }
 
     /**

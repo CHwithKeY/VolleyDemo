@@ -13,9 +13,11 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.android.volley.RequestQueue;
 
@@ -36,7 +38,7 @@ import java.util.regex.Pattern;
 /**
  * Created by KeY on 2016/6/5.
  */
-public final class Methods {
+public final class Methods implements ErrorSet{
 
     // 点击收回输入法软键盘
     public static void collapseIME(Context context) {
@@ -65,6 +67,31 @@ public final class Methods {
         }, 300);
     }
 
+    public static void expandIME(final View view, long delay) {
+
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(view, 0);
+            }
+        }, delay);
+    }
+
+
+    public void setMaxLength(EditText et, int length) {
+        try {
+            et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(length)});
+        } catch (Exception e) {
+            Log.e(getClass().getName(), IMPORTED_EDITTEXT_IS_NULL);
+        }
+    }
+
     static RequestQueue queue;
 
 //    public static void loadOnlineImage(ImageView image, String img_url, BitmapCache cache) {
@@ -78,8 +105,6 @@ public final class Methods {
 //
 //        loader.get(HttpSet.PUBLIC_URL + img_url, listener);
 //    }
-
-    public final static String ERROR_DOC_PATH_UNLOAD = "the path is unload";
 
     public static ArrayList<String> getImageFiles(String string) {
         // TODO Auto-generated method stub
@@ -106,7 +131,6 @@ public final class Methods {
         }
         return picList;
     }
-
 
     // 图片的压缩
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
