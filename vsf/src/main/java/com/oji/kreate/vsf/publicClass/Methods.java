@@ -18,8 +18,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+import com.oji.kreate.vsf.R;
+import com.oji.kreate.vsf.http.HttpSet;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -38,7 +43,7 @@ import java.util.regex.Pattern;
 /**
  * Created by KeY on 2016/6/5.
  */
-public final class Methods implements ErrorSet{
+public final class Methods implements ErrorSet {
 
     // 点击收回输入法软键盘
     public static void collapseIME(Context context) {
@@ -84,27 +89,27 @@ public final class Methods implements ErrorSet{
     }
 
 
-    public void setMaxLength(EditText et, int length) {
+    public static void setMaxLength(EditText et, int length) {
         try {
             et.setFilters(new InputFilter[]{new InputFilter.LengthFilter(length)});
         } catch (Exception e) {
-            Log.e(getClass().getName(), IMPORTED_EDITTEXT_IS_NULL);
+            Log.e("Methods", IMPORTED_EDITTEXT_IS_NULL);
         }
     }
 
-    static RequestQueue queue;
+    private static RequestQueue queue;
 
-//    public static void loadOnlineImage(ImageView image, String img_url, BitmapCache cache) {
-//        if (queue == null) {
-//            queue = Volley.newRequestQueue(image.getContext());
-//        }
-//
-//        ImageLoader loader = new ImageLoader(queue, cache);
-//
-//        ImageLoader.ImageListener listener = ImageLoader.getImageListener(image, R.drawable.ic_public_none_image, R.drawable.ic_public_none_image);
-//
-//        loader.get(HttpSet.PUBLIC_URL + img_url, listener);
-//    }
+    public static void loadOnlineImage(ImageView image, String img_url, BitmapCache cache) {
+        if (queue == null) {
+            queue = Volley.newRequestQueue(image.getContext());
+        }
+
+        ImageLoader loader = new ImageLoader(queue, cache);
+
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(image, R.drawable.ic_public_none_image, R.drawable.ic_public_none_image);
+
+        loader.get(img_url, listener);
+    }
 
     public static ArrayList<String> getImageFiles(String string) {
         // TODO Auto-generated method stub
