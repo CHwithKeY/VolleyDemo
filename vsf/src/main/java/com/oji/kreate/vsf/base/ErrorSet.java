@@ -13,6 +13,8 @@ interface ErrorSet {
 
     String TITLE_BACK_BUTTON_NOT_FOUND = "没有引入返回键 button 布局---Back button is not imported.";
 
+    String COLLAPSE_VIEW_IMPORTED_WRONG = "要点击回收输入法的view导入有问题，请确认该view的存在---The imported view to collapse IME is wrong, please check if the view is exist.";
+
     // BaseHttpAction
     String HANDLE_JSON_STRING_WRONG = "Json获取httpKey失败，请检查httpKey是否正确或Json数据是否有该key---Json got httpKey failed, please check if httpKey was right.";
 

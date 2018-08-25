@@ -127,15 +127,19 @@ public abstract class BaseHttpActivity extends AppCompatActivity implements Remo
         }
     }
 
-    protected void collapseIME(int viewResId) {
-        View view = findViewById(viewResId);
+    public void collapseIME(int viewResId) {
+        try {
+            View view = findViewById(viewResId);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Methods.collapseIME(BaseHttpActivity.this);
-            }
-        });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Methods.collapseIME(BaseHttpActivity.this);
+                }
+            });
+        } catch (Exception e) {
+            Log.e(getClass().getName(), COLLAPSE_VIEW_IMPORTED_WRONG);
+        }
     }
 
     /**
